@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://7tj6mmj7k4lh"]
+
+[ext_resource type="Texture2D" uid="uid://ddcaikck1lavr" path="res://RTSAssets/wizard.png" id="1_3p8af"]
+[ext_resource type="Script" path="res://unit.gd" id="1_8h5gg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6noww"]
+radius = 6.08276
+
+[sub_resource type="Animation" id="Animation_8185x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_y8v71"]
+resource_name = "idle"
+length = 0.8
+loop_mode = 1
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_43ocn"]
+resource_name = "running"
+length = 0.6
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s6yaj"]
+_data = {
+"RESET": SubResource("Animation_8185x"),
+"idle": SubResource("Animation_y8v71"),
+"running": SubResource("Animation_43ocn")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kvm61"]
+radius = 12.0
+
+[node name="Unit" type="CharacterBody2D" groups=["units"]]
+collision_layer = 6
+collision_mask = 7
+script = ExtResource("1_8h5gg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6noww")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_s6yaj")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_3p8af")
+hframes = 4
+vframes = 2
+
+[node name="Detect" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detect"]
+shape = SubResource("CircleShape2D_kvm61")
